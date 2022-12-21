@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.PORT || 8080;
 
+const ShareService = require('./src/services/ShareService');
 
 app.use(bodyParser.json());
 app.use(
@@ -19,3 +20,5 @@ app.get('/', (req,res) => {
 app.listen(port, () => {
     console.log(`App listening at http://localhost:${port}`)
 });
+
+ShareService.handleSharePrices();
