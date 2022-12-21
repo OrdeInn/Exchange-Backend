@@ -14,23 +14,19 @@ model Share {
   id          String      @id @default(uuid()) @db.Uuid
   symbol      String      @unique
   rate        Float
-  trades      Trade[]
-  portfolio   Portfolio   @relation(fields: [portfolioId], references: [id])
-  portfolioId String      @db.Uuid
+  updatedAt   DateTime    @updatedAt
 }
 
 model Portfolio {
   id        String   @id @default(uuid()) @db.Uuid
-  userName  String   @unique
-  shares    Share[]
+  email     String   @unique
   trades    Trade[]
 }
 
 model Trade {
   id          String     @id @default(uuid()) @db.Uuid
   type        TradeType
-  share       Share      @relation(fields: [shareId], references: [id])
-  shareId     String     @db.Uuid  
+  shareCode   String     
   portfolio   Portfolio  @relation(fields: [portfolioId], references: [id])
   portfolioId String     @db.Uuid 
   rate        Float
