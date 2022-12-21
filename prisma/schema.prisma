@@ -10,41 +10,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
-  id              String       @id @default(uuid()) @db.Uuid
-  createdAt       DateTime     @default(now())
-  name            String
-  email           String       @unique
-  password        String
-  portfolio       Portfolios?
-  role            Role
+model Share {
+  id          String      @id @default(uuid()) @db.Uuid
+  symbol      String      @unique
+  rate        Float
+  trades      Trade[]
+  portfolio   Portfolio   @relation(fields: [portfolioId], references: [id])
+  portfolioId String      @db.Uuid
 }
 
-enum Role {
-  SHAREHOLDER
-  ADMIN
+model Portfolio {
+  id        String   @id @default(uuid()) @db.Uuid
+  userName  String   @unique
+  shares    Share[]
+  trades    Trade[]
 }
 
-model Portfolios {
-  id          String        @id @default(uuid()) @db.Uuid
-  user        Users         @relation(fields: [userId], references: [id])
-  userId      String        @unique @db.Uuid
-  registered  Boolean       @default(false)
-  shares      UserShares[]
+model Trade {
+  id          String     @id @default(uuid()) @db.Uuid
+  type        TradeType
+  share       Share      @relation(fields: [shareId], references: [id])
+  shareId     String     @db.Uuid  
+  portfolio   Portfolio  @relation(fields: [portfolioId], references: [id])
+  portfolioId String     @db.Uuid 
+  rate        Float
 }
 
-model Shares {
-  id          String        @id @default(uuid()) @db.Uuid
-  code        String
-  price       Decimal
-  amount      Int
-}
-
-model UserShares {
-  id          String        @id @default(uuid()) @db.Uuid
-  code        String
-  price       Decimal
-  amount      Int
-  portfolio   Portfolios    @relation(fields: [portfolioId], references: [id])
-  portfolioId String        @db.Uuid 
+enum TradeType {
+  BUY
+  SELL
 }
