@@ -39,7 +39,7 @@ function ShareService() {
         return serviceResult;
     };
 
-    this.getLatestShare = async function(request) {
+    this.getShare = async function(request) {
         const serviceResult = {
             error: false
         };

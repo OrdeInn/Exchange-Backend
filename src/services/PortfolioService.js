@@ -25,6 +25,24 @@ function Portfolio () {
 
         return serviceResult;
     };
+
+    this.getPortfolio = async function(id) {
+        const serviceResult = {
+            error: false
+        };
+
+        try {
+            serviceResult.obj = await prisma.portfolio.findFirst({
+                where: {id: id}
+            });
+
+        } catch(err) {
+            serviceResult.error = true;
+            serviceResult.errorMsg = `Error while fetching portfolio ${id}.ErrorMsg: ${err.message}`;
+        }
+
+        return serviceResult;
+    };
 }
 
 module.exports = new Portfolio();

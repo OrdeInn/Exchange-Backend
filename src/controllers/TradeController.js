@@ -2,7 +2,7 @@ const TradeService = require('../services/TradeService');
 const ShareService = require('../services/ShareService');
 
 async function buyShare(req, res, next) {
-    const latestShareresult = await ShareService.getLatestShare({symbol: req.body.shareCode});
+    const latestShareresult = await ShareService.getShare({symbol: req.body.shareCode});
 
     if (latestShareresult.error) {
         res.status(500).send({ message:latestShareresult.errorMsg });
@@ -34,7 +34,7 @@ async function sellShare(req, res, next) {
         res.status(400).send({ message:`The share is not available to sell` });
         return;
     }
-    const latestShareRes = await ShareService.getLatestShare({symbol: req.body.shareCode});
+    const latestShareRes = await ShareService.getShare({symbol: req.body.shareCode});
     
     if (latestShareRes.error) {
         res.status(500).send({ message:latestShareRes.errorMsg });
