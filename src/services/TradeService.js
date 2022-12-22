@@ -5,7 +5,7 @@ const { PrismaClient } = require('@prisma/client');
 function TradeService() {
     const prisma = new PrismaClient();
 
-    this.createTradeTransaction() = async function(tradeRequest) {
+    this.createTradeTransaction = async function(tradeRequest) {
         const serviceResult = {
             error: false
         };
@@ -16,7 +16,7 @@ function TradeService() {
                     type: tradeRequest.TYPE,
                     shareCode: tradeRequest.shareCode,
                     portfolio: {connect: {id: tradeRequest.portfolioId}},
-                    rate: tradeRequest.sharePrice,
+                    rate: tradeRequest.rate,
                     quantity: tradeRequest.quantity
                 }
             });
@@ -28,34 +28,36 @@ function TradeService() {
         return serviceResult;
     };
 
-    this.getShareAvailability = async function(shareCode) {
+    this.getShareAvailability = async function(request) {
         try {
             const buyTypeTrades = await prisma.trade.findMany({
                 where: {
                     type: 'BUY',
-                    shareCode: shareCode
+                    portfolioId: request.portfolioId,
+                    shareCode: request.shareCode
                 },
                 select: {
-                    quantity
+                    quantity: true
                 }
             });
 
             const sellTypeTrades = await prisma.trade.findMany({
                 where: {
                     type: 'SELL',
-                    shareCode: shareCode
+                    portfolioId: request.portfolioId,
+                    shareCode: request.shareCode
                 },
                 select: {
-                    quantity
+                    quantity: true
                 }
             });
 
-            const totalBought = buyTypeTrades.reduce((acc, num)=> {
-                return acc + num;
+            const totalBought = buyTypeTrades.reduce((acc, trade)=> {
+                return acc + trade.quantity;
             }, 0);
 
-            const totalSold = sellTypeTrades.reduce((acc, num)=> {
-                return acc + num;
+            const totalSold = sellTypeTrades.reduce((acc, trade)=> {
+                return acc + trade.quantity;
             }, 0);
 
             return (totalBought - totalSold) > 0;

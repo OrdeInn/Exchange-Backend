@@ -2,13 +2,18 @@ const TradeService = require('../services/TradeService');
 const ShareService = require('../services/ShareService');
 
 async function buyShare(req, res, next) {
-    const latestShare = await ShareService.getLatestShare(req.shareCode);
-    
+    const latestShareresult = await ShareService.getLatestShare({symbol: req.body.shareCode});
+
+    if (latestShareresult.error) {
+        res.status(500).send({ message:latestShareresult.errorMsg });
+        return;
+    }
+
     const tradeRequest = {
         TYPE: 'BUY',
         shareCode: req.body.shareCode,
         portfolioId: req.body.portfolioId,
-        rate: latestShare.rate,
+        rate: latestShareresult.obj.rate,
         quantity: req.body.quantity
     };
 
@@ -23,18 +28,24 @@ async function buyShare(req, res, next) {
 }
 
 async function sellShare(req, res, next) {
-    const availableToSell = TradeService.getShareAvailability(req.body.shareCode);
+    const availableToSell = await TradeService.getShareAvailability(req.body.shareCode);
 
     if (!availableToSell) {
         res.status(400).send({ message:`The share is not available to sell` });
         return;
     }
-    const latestShare = await ShareService.getLatestShare(req.shareCode);
+    const latestShareRes = await ShareService.getLatestShare({symbol: req.body.shareCode});
+    
+    if (latestShareRes.error) {
+        res.status(500).send({ message:latestShareRes.errorMsg });
+        return;
+    }
+    
     const tradeRequest = {
         TYPE: 'SELL',
         shareCode: req.body.shareCode,
         portfolioId: req.body.portfolioId,
-        rate: latestShare.rate,
+        rate: latestShareRes.obj.rate,
         quantity: req.body.quantity
     };
 

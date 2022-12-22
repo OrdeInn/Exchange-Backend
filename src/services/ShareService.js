@@ -13,14 +13,14 @@ function ShareService() {
             
             if (!sharesResult.error) {
                 sharesResult.obj.forEach(async (share) => {
-                    //TODO
-                    let latestPrice = 14.75;
+                    //Random price for every share
+                    let latestPrice = (Math.random() * (1000 - 1) + 1).toFixed(2);
                     
                     //async write
                     this.updatePrice({id: share.id, latestPrice: latestPrice});
                 });
             }
-        }, 600000); // run every 3 min
+        }, 3600000); // run every hour
     };
 
     this.getAllShares = async function() {
@@ -45,7 +45,7 @@ function ShareService() {
         };
 
         try {
-            serviceResult.obj = await prisma.share.findOne({
+            serviceResult.obj = await prisma.share.findFirst({
                 where: {symbol: request.symbol},
                 orderBy: {updatedAt: 'desc'}
             });
