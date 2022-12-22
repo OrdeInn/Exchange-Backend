@@ -43,6 +43,22 @@ function Portfolio () {
 
         return serviceResult;
     };
+
+    this.getAllPortfolios = async function() {
+        const serviceResult = {
+            error: false
+        };
+
+        try {
+            serviceResult.obj = await prisma.portfolio.findMany();
+
+        } catch(err) {
+            serviceResult.error = true;
+            serviceResult.errorMsg = `Error while fetching portfolios: ${err.message}`;
+        }
+        
+        return serviceResult;
+    };
 }
 
 module.exports = new Portfolio();

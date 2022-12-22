@@ -1,5 +1,16 @@
 const PortfolioService = require('../services/PortfolioService');
 
+async function getPortfolios(req, res, next) {
+    const portfolioRes = await PortfolioService.getAllPortfolios();
+
+    if (portfolioRes.error || !portfolioRes.obj) {
+        res.status(400).send({message: portfolioRes.errorMsg || `There is no registered portfolio`});
+        return;
+    }
+
+    res.status(200).send(portfolioRes.obj)
+}
+
 async function registerPortfolio(req, res, next) {
     const registerRequest = {
         email: req.body.email
@@ -16,5 +27,6 @@ async function registerPortfolio(req, res, next) {
 }
 
 module.exports = {
-    registerPortfolio: registerPortfolio
+    registerPortfolio: registerPortfolio,
+    getPortfolios: getPortfolios
 }

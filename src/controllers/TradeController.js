@@ -1,6 +1,17 @@
 const TradeService = require('../services/TradeService');
 const ShareService = require('../services/ShareService');
 
+async function getTrades(req, res, next) {
+    const tradeRes = await TradeService.getTradesForPortfolio(req.params.portfolioId);
+
+    if (tradeRes.error || !tradeRes.obj) {
+        res.status(400).send({message: tradeRes.errorMsg || `Error fetching trades portfolioId ${req.params.portfolioId}`});
+        return;
+    }
+
+    res.status(200).send(tradeRes.obj)
+}
+
 async function buyShare(req, res, next) {
     const latestShareresult = await ShareService.getShare({symbol: req.body.shareCode});
 
@@ -28,10 +39,17 @@ async function buyShare(req, res, next) {
 }
 
 async function sellShare(req, res, next) {
-    const availableToSell = await TradeService.getShareAvailability(req.body.shareCode);
+    const tradeRequest = {
+        TYPE: 'SELL',
+        shareCode: req.body.shareCode,
+        portfolioId: req.body.portfolioId,
+        quantity: req.body.quantity
+    };
+    
+    const availableToSell = await TradeService.getAvailabilityToSell(tradeRequest);
 
     if (!availableToSell) {
-        res.status(400).send({ message:`The share is not available to sell` });
+        res.status(400).send({ message:`The share is not available to sell for portfolio` });
         return;
     }
     const latestShareRes = await ShareService.getShare({symbol: req.body.shareCode});
@@ -40,15 +58,8 @@ async function sellShare(req, res, next) {
         res.status(500).send({ message:latestShareRes.errorMsg });
         return;
     }
+    tradeRequest.rate = latestShareRes.obj.rate;
     
-    const tradeRequest = {
-        TYPE: 'SELL',
-        shareCode: req.body.shareCode,
-        portfolioId: req.body.portfolioId,
-        rate: latestShareRes.obj.rate,
-        quantity: req.body.quantity
-    };
-
     const serviceResult = await TradeService.createTradeTransaction(tradeRequest);
 
     if (serviceResult.error) {
@@ -61,5 +72,6 @@ async function sellShare(req, res, next) {
 
 module.exports = {
     buyShare: buyShare,
-    sellShare: sellShare
+    sellShare: sellShare,
+    getTrades: getTrades
 }

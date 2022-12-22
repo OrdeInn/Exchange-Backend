@@ -28,16 +28,13 @@ function TradeService() {
         return serviceResult;
     };
 
-    this.getShareAvailability = async function(request) {
+    this.getAvailabilityToSell = async function(request) {
         try {
             const buyTypeTrades = await prisma.trade.findMany({
                 where: {
                     type: 'BUY',
                     portfolioId: request.portfolioId,
                     shareCode: request.shareCode
-                },
-                select: {
-                    quantity: true
                 }
             });
 
@@ -60,13 +57,32 @@ function TradeService() {
                 return acc + trade.quantity;
             }, 0);
 
-            return (totalBought - totalSold) > 0;
+            return (totalBought - (totalSold + request.quantity)) >= 0;
 
         } catch(err) {
             console.log(err);
             return false;
         }
     };
+
+    this.getTradesForPortfolio = async function(portfolioId) {
+        const serviceResult = {
+            error: false
+        };
+
+        try {
+            serviceResult.obj = await prisma.trade.findMany({
+                where: {portfolioId: portfolioId},
+                orderBy: {createdAt: 'desc'}
+            });
+
+        } catch(err) {
+            serviceResult.error = true;
+            serviceResult.errorMsg = `Error while fetching trades for portfolio: ${portfolioId}.Error: ${err.message}`;
+        }
+        
+        return serviceResult;
+    }
 }
 
 module.exports = new TradeService();

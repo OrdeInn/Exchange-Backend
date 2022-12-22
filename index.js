@@ -6,6 +6,7 @@ const port = process.env.PORT || 8080;
 const ShareService = require('./src/services/ShareService');
 const portfolioRoutes = require('./src/routes/PortfolioRoutes');
 const tradeRoutes = require('./src/routes/TradeRoutes');
+const shareRoutes = require('./src/routes/ShareRoutes');
 
 app.use(bodyParser.json());
 app.use(
@@ -16,6 +17,7 @@ app.use(
 
 app.use('/portfolio', portfolioRoutes);
 app.use('/trade', tradeRoutes);
+app.use('/shares', shareRoutes);
 
 app.get('/', (req,res) => {
     res.send({ message: 'Hello World!'} );

@@ -30,7 +30,8 @@ model Trade {
   portfolio   Portfolio  @relation(fields: [portfolioId], references: [id])
   portfolioId String     @db.Uuid 
   rate        Float
-  quantity    Int        @default(1) 
+  quantity    Int        @default(1)
+  createdAt   DateTime   @default(now())
 }
 
 enum TradeType {
