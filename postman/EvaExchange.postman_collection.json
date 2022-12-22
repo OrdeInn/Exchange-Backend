@@ -1,0 +1,242 @@
+{
+	"info": {
+		"_postman_id": "0cbb4e63-3b7e-48b3-a654-a1c21665aeaf",
+		"name": "EvaExchange",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12735609"
+	},
+	"item": [
+		{
+			"name": "GET Requests",
+			"item": [
+				{
+					"name": "Get All Shares",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": [
+						{
+							"name": "All Shares with initial rates",
+							"originalRequest": {
+								"method": "GET",
+								"header": []
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": \"11111111-1111-0000-0000-000000000000\",\n        \"symbol\": \"EVA\",\n        \"rate\": 10.5,\n        \"updatedAt\": \"2022-12-22T21:28:20.186Z\"\n    },\n    {\n        \"id\": \"22222222-2222-0000-0000-000000000000\",\n        \"symbol\": \"GOG\",\n        \"rate\": 20.5,\n        \"updatedAt\": \"2022-12-22T21:28:20.186Z\"\n    },\n    {\n        \"id\": \"44444444-3333-0000-0000-000000000000\",\n        \"symbol\": \"AMZ\",\n        \"rate\": 30.5,\n        \"updatedAt\": \"2022-12-22T21:28:20.186Z\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get All Portfolios",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": [
+						{
+							"name": "All portfolios with initial",
+							"originalRequest": {
+								"method": "GET",
+								"header": []
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": \"11111111-1111-0000-0000-000000000000\",\n        \"email\": \"emirhanoguz@gmail.com\"\n    },\n    {\n        \"id\": \"22222222-2222-0000-0000-000000000000\",\n        \"email\": \"ali.kacar@gmail.com\"\n    },\n    {\n        \"id\": \"33333333-3333-0000-0000-000000000000\",\n        \"email\": \"mehmetsavar@gmail.com\"\n    },\n    {\n        \"id\": \"44444444-4444-0000-0000-000000000000\",\n        \"email\": \"basakuzun@gmail.com\"\n    },\n    {\n        \"id\": \"55555555-5555-0000-0000-000000000000\",\n        \"email\": \"gamze.tan@gmail.com\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get All Portfolio Trades",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/trade/11111111-1111-0000-0000-000000000000",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"trade",
+								"11111111-1111-0000-0000-000000000000"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successfull trades for first port",
+							"originalRequest": {
+								"method": "GET",
+								"header": []
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": \"11111111-1111-0000-0000-000000000000\",\n        \"type\": \"BUY\",\n        \"shareCode\": \"EVA\",\n        \"portfolioId\": \"11111111-1111-0000-0000-000000000000\",\n        \"rate\": 10.5,\n        \"quantity\": 1,\n        \"createdAt\": \"2022-12-22T21:28:20.186Z\"\n    },\n    {\n        \"id\": \"55555555-1111-0000-0000-000000000000\",\n        \"type\": \"BUY\",\n        \"shareCode\": \"AMZ\",\n        \"portfolioId\": \"11111111-1111-0000-0000-000000000000\",\n        \"rate\": 50.5,\n        \"quantity\": 5,\n        \"createdAt\": \"2022-12-22T21:28:20.186Z\"\n    }\n]"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "SELL",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"shareCode\": \"EVA\",\n    \"portfolioId\": \"11111111-1111-0000-0000-000000000000\",\n    \"quantity\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/trade/sell",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"trade",
+								"sell"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Bad request for portfolio",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"shareCode\": \"EVA\",\n    \"portfolioId\": \"11111111-1111-0000-0000-000000000000\",\n    \"quantity\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/trade/sell",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"trade",
+										"sell"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"The share is not available to sell for portfolio\"\n}"
+						},
+						{
+							"name": "Successful SELL",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"shareCode\": \"EVA\",\n    \"portfolioId\": \"11111111-1111-0000-0000-000000000000\",\n    \"quantity\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/trade/sell",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"trade",
+										"sell"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"id\": \"db62f93a-bd4a-45c8-8ce6-b41dcdc531db\",\n    \"type\": \"SELL\",\n    \"shareCode\": \"AMZ\",\n    \"portfolioId\": \"11111111-1111-0000-0000-000000000000\",\n    \"rate\": 30.5,\n    \"quantity\": 1,\n    \"createdAt\": \"2022-12-22T18:31:34.359Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "BUY",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"shareCode\": \"EVA\",\n    \"portfolioId\": \"11111111-1111-0000-0000-000000000000\",\n    \"quantity\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/trade/buy",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"trade",
+								"buy"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successful BUY",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"shareCode\": \"EVA\",\n    \"portfolioId\": \"11111111-1111-0000-0000-000000000000\",\n    \"quantity\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/trade/buy",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"trade",
+										"buy"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"id\": \"96a0ccc6-6d07-4eac-a5ad-e8eba5efee42\",\n    \"type\": \"BUY\",\n    \"shareCode\": \"EVA\",\n    \"portfolioId\": \"11111111-1111-0000-0000-000000000000\",\n    \"rate\": 10.5,\n    \"quantity\": 1,\n    \"createdAt\": \"2022-12-22T18:30:37.505Z\"\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}
