@@ -6,7 +6,9 @@ function ShareService() {
     const prisma = new PrismaClient();
 
     this.handleSharePrices = function() {
+        console.log('Called handleSharePrices');
         setInterval(async () => {
+            console.log('Triggered')
             const sharesResult = await this.getAllShares();
             
             if (!sharesResult.error) {
@@ -18,7 +20,7 @@ function ShareService() {
                     this.updatePrice({id: share.id, latestPrice: latestPrice});
                 });
             }
-        }, 3600000); // run every hour
+        }, 600000); // run every 3 min
     };
 
     this.getAllShares = async function() {
@@ -66,7 +68,7 @@ function ShareService() {
                 where: { id: updateRequest.id },
                 data: { rate: updateRequest.latestPrice}
             });
-
+            console.log('Price updated.')
         } catch(err) {
             serviceResult.error = true;
             serviceResult.errorMsg = `Error while updating share price with id: ${updateRequest.id}.ErrorMsg: ${err.message}`;

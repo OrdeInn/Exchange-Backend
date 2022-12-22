@@ -14,7 +14,7 @@ function Portfolio () {
         try {
             serviceResult.obj = await prisma.portfolio.create({
                 data: {
-                    email: registerRequest.userName
+                    email: registerRequest.email
                 }
             });
 
