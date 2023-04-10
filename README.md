@@ -1,4 +1,4 @@
-# EvaExchange
+# Exchange Application
 
 ### Tech Stack:
 - Node.js with express.js
